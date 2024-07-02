@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'articles.dart';
 import 'dart:developer' as developer;
+import 'package:url_launcher/url_launcher.dart';
 
 class ArticleCard extends StatelessWidget{
 
@@ -12,7 +13,8 @@ class ArticleCard extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => developer.log('URL : ${article.url}'),
+      onTap: () => _launchUrl(article.url),  //developer.log('URL : ${article.url}'),
+
       child: Card(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,5 +46,14 @@ class ArticleCard extends StatelessWidget{
         ),
       ),
     );
+  }
+  
+  _launchUrl(String url) async { //비동기 동작 
+    final Uri uri=Uri.parse(url);
+    if(await canLaunchUrl(uri)){
+      await launchUrl(uri);
+    } else{
+      throw 'Could not launch $url';
+    }
   }
 }
